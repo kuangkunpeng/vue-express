@@ -2,7 +2,7 @@
 var ObjectId = require('mongodb').ObjectID;
 
 //数据库
-var db = require('../../db/index.js')
+var db = require('../../mongodb/index.js')
 
 // 文件上传插件
 var multer  = require('multer');
@@ -11,6 +11,8 @@ var multer  = require('multer');
 var crypto = require('crypto');
 // 路径
 var path = require("path")
+
+var productModel = require('../../models/product.js')
 
 module.exports = {
 	// 上传文件配置
@@ -35,21 +37,21 @@ module.exports = {
 	uploadFile:function(req, res, next){
 		var filePath=req.file;
 		filePath.path=filePath.path.replace(process.cwd()+'\\public','');
-	 	res.send(filePath);
+		res.send(filePath);
 	},
 	// 获取产品列表
 	productList:function(req, res, next) {
 		var id;
-		if(req.query._id){
-			id=req.query._id;
-			db.select('product',{_id:ObjectId(id)},function(r){
-				res.send(r);
+		id=req.query._id;
+		if(id){
+			productModel.find({_id:ObjectId(id)},function(error,data){
+				res.send(data);
 			});
 		}else{
-			db.select('product',{},function(r){
-				res.send(r);
+			productModel.find(function(error,data){
+				res.send(data);
 			});
-
 		}
+		
 	}
 }
