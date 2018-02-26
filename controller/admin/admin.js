@@ -53,5 +53,19 @@ module.exports = {
 			});
 		}
 		
-	}
+	},
+	// 表单内容添加
+	addproduct:function(req, res, next) {
+		productModel.create(req.body.params,function(){
+			res.send('a');
+	
+		});
+	},
+	// 产品删除
+	delproduct:function(req, res, next) {
+		productModel.remove({_id:req.body.params.id},function(){
+			res.send('ok');
+	
+		});
+	},
 }
